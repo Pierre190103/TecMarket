@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
     <a href="inicio.php" class="navbar-brand d-flex d-lg-none me-4">
-        <img class="rounded flex-shrink-0 me-3" src="img2/Logo_Unico.png" alt="Producto 1" style="width: 40px; height: 40px;">
+        <img class="rounded flex-shrink-0 me-3" src="img/Logo_Unico.png" alt="Producto 1" style="width: 40px; height: 40px;">
     </a>
     <a href="#" class="sidebar-toggler flex-shrink-0">
         <i class="fa fa-bars"></i>

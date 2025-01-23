@@ -5,7 +5,7 @@
 <meta content="" name="description">
 
 <!-- Favicon -->
-<link href="img2/Logo_Unico.png" rel="icon">
+<link href="img/Logo_Unico.png" rel="icon">
 
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,10 +18,10 @@
 
 <!-- Libraries Stylesheet -->
 <link href="lib2/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-<link href="lib2/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+<link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
 <!-- Customized Bootstrap Stylesheet -->
-<link href="css2/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Template Stylesheet -->
-<link href="css2/style.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">

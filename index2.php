@@ -85,7 +85,7 @@ $conn->close();
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        <img src="img2/Logo_Unico.png" alt="Logo" width="150">
+                        <img src="img/Logo_Unico.png" alt="Logo" width="150">
                     </div>
                     <div class="card-body">
                         <?php
