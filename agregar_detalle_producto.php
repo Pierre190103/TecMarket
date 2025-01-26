@@ -134,85 +134,112 @@ include 'config.php'; // Incluimos el archivo de configuración
                         <div class="col-12">
                             <div class="bg-light text-center rounded p-4">
                                 <h4 class="mb-4">Agregar Producto</h4>
-                                <form action="subir_producto.php" method="POST">
+                                <form action="subir_detalle_producto.php" method="POST">
                                     <div class="mb-3 text-start">
-                                        <div class="form-floating mb-3">
-    <select class="form-select" id="detalleProductoId" name="detalleProductoId" required>
-        <option value="" disabled selected>Seleccione un producto</option>
-        <?php
-        // Conexión a la base de datos
-        $conn = new mysqli($servername, $username, $password, $database, $port);
-        if ($conn->connect_error) {
-            die("Conexión fallida: " . $conn->connect_error);
-        }
+                                        <label for="codigo" class="form-label">Código de Barras</label>
+                                        <div class="input-group">
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="codigo" 
+                                                name="codigo" 
+                                                placeholder="Ingrese código de barras" 
+                                                required
+                                                />
+                                            <button 
+                                                class="btn btn-primary scan-btn" 
+                                                type="button" 
+                                                onclick="openScanner(this)">
+                                                Escanear
+                                            </button>
+                                        </div>
+                                    </div>
 
-        // Consulta de productos
-        $sqlProductos = "SELECT id, nombre FROM detalle_producto";
-        $resultadoProductos = $conn->query($sqlProductos);
-        if ($resultadoProductos->num_rows > 0) {
-            while ($fila = $resultadoProductos->fetch_assoc()) {
-                echo "<option value='" . $fila['id'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
-            }
-        } else {
-            echo "<option value='' disabled>No hay productos disponibles</option>";
-        }
-        ?>
-    </select>
-    <label for="detalleProductoId">Nombre Producto</label>
-</div>
+                                    <div class="overlay" id="scanner-overlay" style="display: none;">
+                                        <div class="scanner-window">
+                                            <button class="close-btn btn btn-danger" onclick="closeScanner()">X</button>
+                                            <div id="scanner-container"></div>
+                                        </div>
+                                    </div>
+                                    <div class="overlay" id="scanner-overlay">
+                                        <div class="scanner-window">
+                                            <button class="close-btn" onclick="closeScanner()">X</button>
+                                            <div id="scanner-container"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 text-start">
+                                        <label for="nombe" class="form-label">nombre</label>
+                                        <input type="text" class="form-control" id="nombre" name="stock" placeholder="Ingrese la cantidad en stock" required>
+                                    </div>
 
-                                        <div class="mb-3 text-start">
-                                            <label for="stock" class="form-label">Stock</label>
-                                            <input type="number" class="form-control" id="stock" name="stock" placeholder="Ingrese la cantidad en stock" required>
-                                        </div>
-                                        <div class="mb-3 text-start">
-                                            <label for="fechaVencimiento" class="form-label">Fecha de Vencimiento</label>
-                                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento">
-                                        </div>
-                                        <div class="mb-3 text-start">
-                                            <label for="precioCompra" class="form-label">Precio de Compra</label>
-                                            <input type="number" step="0.01" class="form-control" id="precioCompra" name="precioCompra" placeholder="Ingrese el precio de compra" required>
-                                        </div>
-                                        <div class="mb-3 text-start">
-                                            <label for="precioVenta" class="form-label">Precio de Venta</label>
-                                            <input type="number" step="0.01" class="form-control" id="precioVenta" name="precioVenta" placeholder="Ingrese el precio de venta" required>
-                                        </div>
-                                        <div class="mb-3 text-start">
-                                            <label for="ganancia" class="form-label">Ganancia</label>
-                                            <input type="number" step="0.01" class="form-control" id="ganancia" name="ganancia" placeholder="Ganancia calculada automáticamente" readonly>
-                                        </div>
-                                        <div class="mb-3 text-start">
-                                            <label for="detalleBodegaId" class="form-label">Detalle Bodega</label>
-                                            <select class="form-control" id="detalleBodegaId" name="detalleBodegaId" required>
-                                                <option value="" disabled selected>Seleccione una bodega</option>
-                                                <?php
-                                                // Consulta de bodegas
-                                                if (!isset($nombreusuario)) {
-                                                    $nombreusuario = $_SESSION['username'] ?? '';
+                                    <div class="mb-3 text-start">
+                                        <label for="detalleEmpaqueId" class="form-label">Tipo de Empaque</label>
+                                        <select class="form-control" id="detalleEmpaqueId" name="detalleEmpaqueId" required>
+                                            <option value="" disabled selected>Seleccione Empaque</option>
+                                            <?php
+                                            // Conexión a la base de datos
+                                            $conn = new mysqli($servername, $username, $password, $database, $port);
+                                            if ($conn->connect_error) {
+                                                die("Conexión fallida: " . $conn->connect_error);
+                                            }
+
+                                            // Consulta de productos
+                                            $sqlProductos = "SELECT codigo, nombre FROM empaque";
+                                            $resultadoProductos = $conn->query($sqlProductos);
+                                            if ($resultadoProductos->num_rows > 0) {
+                                                while ($fila = $resultadoProductos->fetch_assoc()) {
+                                                    echo "<option value='" . $fila['codigo'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
                                                 }
-                                                $sqlBodegas = "SELECT detalle_bodega.id, detalle_bodega.nombre_bodega 
-                                           FROM detalle_bodega 
-                                           INNER JOIN users 
-                                           ON detalle_bodega.id = users.bodega_detalle_id 
-                                           WHERE users.username = ?";
-                                                $stmtBodegas = $conn->prepare($sqlBodegas);
-                                                $stmtBodegas->bind_param("s", $nombreusuario);
-                                                $stmtBodegas->execute();
-                                                $resultadoBodegas = $stmtBodegas->get_result();
-                                                if ($resultadoBodegas->num_rows > 0) {
-                                                    while ($fila = $resultadoBodegas->fetch_assoc()) {
-                                                        echo "<option value='" . $fila['id'] . "'>" . htmlspecialchars($fila['nombre_bodega']) . "</option>";
-                                                    }
-                                                } else {
-                                                    echo "<option value='' disabled>No hay bodegas disponibles</option>";
+                                            } else {
+                                                echo "<option value='' disabled>No hay productos disponibles</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 text-start">
+                                        <label for="peso" class="form-label">Peso</label>
+                                        <input type="number" class="form-control" id="peso" name="peso" placeholder="Ingrese el peso del producto" required>
+                                    </div>
+                                    <div class="mb-3 text-start">
+                                        <label for="unidadId" class="form-label">Unidades</label>
+                                        <select class="form-control" id="unidadId" name="unidadId" required>
+                                            <option value="" disabled selected>Seleccione una unidad</option>
+                                            <?php
+                                            // Consulta directa a la tabla unidades
+                                            $sqlUnidades = "SELECT codigo, nombre FROM unidades";
+                                            $resultadoUnidades = $conn->query($sqlUnidades);
+
+                                            if ($resultadoUnidades->num_rows > 0) {
+                                                while ($fila = $resultadoUnidades->fetch_assoc()) {
+                                                    echo "<option value='" . $fila['codigo'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
                                                 }
-                                                $conn->close();
-                                                ?>
-                                            </select>
-                                        </div>
+                                            } else {
+                                                echo "<option value='' disabled>No hay unidades disponibles</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 text-start">
+                                        <label for="unidadId" class="form-label">Categoria</label>
+                                        <select class="form-control" id="categoriaID" name="categoriaID" required>
+                                            <option value="" disabled selected>Seleccione una categoria</option>
+                                            <?php
+                                            // Consulta directa a la tabla unidades
+                                            $sqlUnidades = "SELECT codigo, nombre FROM categoria";
+                                            $resultadoUnidades = $conn->query($sqlUnidades);
 
+                                            if ($resultadoUnidades->num_rows > 0) {
+                                                while ($fila = $resultadoUnidades->fetch_assoc()) {
+                                                    echo "<option value='" . $fila['codigo'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
+                                                }
+                                            } else {
+                                                echo "<option value='' disabled>No hay unidades disponibles</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
 
-                                        <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                                    <button type="submit" class="btn btn-primary">Agregar Producto</button>
                                 </form>
                             </div>
                         </div>
@@ -222,70 +249,70 @@ include 'config.php'; // Incluimos el archivo de configuración
 
                 <script src="https://unpkg.com/quagga/dist/quagga.min.js"></script>
                 <script>
-                    let currentButton = null;
+                                                let currentButton = null;
 
-                    function openScanner(button) {
-                        currentButton = button;
-                        document.getElementById('scanner-overlay').style.display = 'flex';
+                                                function openScanner(button) {
+                                                    currentButton = button;
+                                                    document.getElementById('scanner-overlay').style.display = 'flex';
 
-                        Quagga.init({
-                            inputStream: {
-                                name: "Live",
-                                type: "LiveStream",
-                                target: document.querySelector('#scanner-container'),
-                                constraints: {
-                                    facingMode: "environment" // Usa la cámara trasera
-                                }
-                            },
-                            decoder: {
-                                readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
-                            }
-                        }, function (err) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-                            Quagga.start();
-                        });
+                                                    Quagga.init({
+                                                        inputStream: {
+                                                            name: "Live",
+                                                            type: "LiveStream",
+                                                            target: document.querySelector('#scanner-container'),
+                                                            constraints: {
+                                                                facingMode: "environment" // Usa la cámara trasera
+                                                            }
+                                                        },
+                                                        decoder: {
+                                                            readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
+                                                        }
+                                                    }, function (err) {
+                                                        if (err) {
+                                                            console.error(err);
+                                                            return;
+                                                        }
+                                                        Quagga.start();
+                                                    });
 
-                        Quagga.onDetected(function (result) {
-                            const code = result.codeResult.code;
-                            if (code) {
-                                // Aquí es donde se pasa el valor al input
-                                const inputField = document.getElementById('codigo'); // Selecciona el campo de entrada
-                                inputField.value = code; // Escribe el código en el campo
-                                closeScanner();
-                            }
-                        });
-                    }
+                                                    Quagga.onDetected(function (result) {
+                                                        const code = result.codeResult.code;
+                                                        if (code) {
+                                                            // Aquí es donde se pasa el valor al input
+                                                            const inputField = document.getElementById('codigo'); // Selecciona el campo de entrada
+                                                            inputField.value = code; // Escribe el código en el campo
+                                                            closeScanner();
+                                                        }
+                                                    });
+                                                }
 
-                    function closeScanner() {
-                        Quagga.stop();
-                        document.getElementById('scanner-overlay').style.display = 'none';
-                    }
-                    function fetchProductByCode(code) {
-                        // Verifica si el código tiene 13 dígitos
-                        if (code.length === 13) {
-                            fetch('buscar_producto.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({codigo: code})
-                            })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            document.getElementById('nombre').value = data.nombre; // Asigna el nombre del producto
-                                        } else {
-                                            document.getElementById('nombre').value = 'No se encontró';
-                                        }
-                                    })
-                                    .catch(error => console.error('Error:', error));
-                        } else {
-                            document.getElementById('nombre').value = 'Código inválido';
-                        }
-                    }
+                                                function closeScanner() {
+                                                    Quagga.stop();
+                                                    document.getElementById('scanner-overlay').style.display = 'none';
+                                                }
+                                                function fetchProductByCode(code) {
+                                                    // Verifica si el código tiene 13 dígitos
+                                                    if (code.length === 13) {
+                                                        fetch('buscar_producto.php', {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify({codigo: code})
+                                                        })
+                                                                .then(response => response.json())
+                                                                .then(data => {
+                                                                    if (data.success) {
+                                                                        document.getElementById('nombre').value = data.nombre; // Asigna el nombre del producto
+                                                                    } else {
+                                                                        document.getElementById('nombre').value = 'No se encontró';
+                                                                    }
+                                                                })
+                                                                .catch(error => console.error('Error:', error));
+                                                    } else {
+                                                        document.getElementById('nombre').value = 'Código inválido';
+                                                    }
+                                                }
                 </script>
 
 
