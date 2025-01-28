@@ -20,8 +20,7 @@
                                 echo '      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-box-open me-2"></i>Productos</a>';
                                 echo '      <div class="dropdown-menu bg-transparent border-0">';
                                 echo '          <a href="agregar_producto.php" class="dropdown-item">Nuevo Producto</a>';
-                                echo '          <a href="agregar_detalle_producto.php" class="dropdown-item">Nuevo Detalle Producto</a>';
-                                echo '          <a href="#" class="dropdown-item">Consulta</a>';
+                                echo '          <a href="Consulta.php" class="dropdown-item">Consulta</a>';
                                 echo '          <a href="#" class="dropdown-item">Validado por fecha</a>';
                                 echo '      </div>';
                                 echo '</div>';

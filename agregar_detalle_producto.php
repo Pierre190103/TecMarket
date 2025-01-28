@@ -133,7 +133,7 @@ include 'config.php'; // Incluimos el archivo de configuración
                     <div class="row g-4">
                         <div class="col-12">
                             <div class="bg-light text-center rounded p-4">
-                                <h4 class="mb-4">Agregar Producto</h4>
+                                <h4 class="mb-4">Nuevo Producto</h4>
                                 <form action="subir_detalle_producto.php" method="POST">
                                     <div class="mb-3 text-start">
                                         <label for="codigo" class="form-label">Código de Barras</label>

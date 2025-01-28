@@ -133,33 +133,36 @@ include 'config.php'; // Incluimos el archivo de configuración
                     <div class="row g-4">
                         <div class="col-12">
                             <div class="bg-light text-center rounded p-4">
-                                <h4 class="mb-4">Agregar Producto</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-4 m-auto">Agregar Producto</h4>
+                                    <button class="btn btn-primary" onclick="window.location.href = 'agregar_detalle_producto.php';">Nuevo Registro</button>
+                                </div>
                                 <form action="subir_producto.php" method="POST">
                                     <div class="mb-3 text-start">
                                         <div class="form-floating mb-3">
-    <select class="form-select" id="detalleProductoId" name="detalleProductoId" required>
-        <option value="" disabled selected>Seleccione un producto</option>
-        <?php
-        // Conexión a la base de datos
-        $conn = new mysqli($servername, $username, $password, $database, $port);
-        if ($conn->connect_error) {
-            die("Conexión fallida: " . $conn->connect_error);
-        }
+                                            <select class="form-select" id="detalleProductoId" name="detalleProductoId" required>
+                                                <option value="" disabled selected>Seleccione un producto</option>
+                                                <?php
+                                                // Conexión a la base de datos
+                                                $conn = new mysqli($servername, $username, $password, $database, $port);
+                                                if ($conn->connect_error) {
+                                                    die("Conexión fallida: " . $conn->connect_error);
+                                                }
 
-        // Consulta de productos
-        $sqlProductos = "SELECT id, nombre FROM detalle_producto";
-        $resultadoProductos = $conn->query($sqlProductos);
-        if ($resultadoProductos->num_rows > 0) {
-            while ($fila = $resultadoProductos->fetch_assoc()) {
-                echo "<option value='" . $fila['id'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
-            }
-        } else {
-            echo "<option value='' disabled>No hay productos disponibles</option>";
-        }
-        ?>
-    </select>
-    <label for="detalleProductoId">Nombre Producto</label>
-</div>
+                                                // Consulta de productos
+                                                $sqlProductos = "SELECT id, nombre FROM detalle_producto";
+                                                $resultadoProductos = $conn->query($sqlProductos);
+                                                if ($resultadoProductos->num_rows > 0) {
+                                                    while ($fila = $resultadoProductos->fetch_assoc()) {
+                                                        echo "<option value='" . $fila['id'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
+                                                    }
+                                                } else {
+                                                    echo "<option value='' disabled>No hay productos disponibles</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                            <label for="detalleProductoId">Nombre Producto</label>
+                                        </div>
 
                                         <div class="mb-3 text-start">
                                             <label for="stock" class="form-label">Stock</label>
@@ -222,70 +225,70 @@ include 'config.php'; // Incluimos el archivo de configuración
 
                 <script src="https://unpkg.com/quagga/dist/quagga.min.js"></script>
                 <script>
-                    let currentButton = null;
+            let currentButton = null;
 
-                    function openScanner(button) {
-                        currentButton = button;
-                        document.getElementById('scanner-overlay').style.display = 'flex';
+            function openScanner(button) {
+                currentButton = button;
+                document.getElementById('scanner-overlay').style.display = 'flex';
 
-                        Quagga.init({
-                            inputStream: {
-                                name: "Live",
-                                type: "LiveStream",
-                                target: document.querySelector('#scanner-container'),
-                                constraints: {
-                                    facingMode: "environment" // Usa la cámara trasera
-                                }
-                            },
-                            decoder: {
-                                readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
-                            }
-                        }, function (err) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-                            Quagga.start();
-                        });
-
-                        Quagga.onDetected(function (result) {
-                            const code = result.codeResult.code;
-                            if (code) {
-                                // Aquí es donde se pasa el valor al input
-                                const inputField = document.getElementById('codigo'); // Selecciona el campo de entrada
-                                inputField.value = code; // Escribe el código en el campo
-                                closeScanner();
-                            }
-                        });
-                    }
-
-                    function closeScanner() {
-                        Quagga.stop();
-                        document.getElementById('scanner-overlay').style.display = 'none';
-                    }
-                    function fetchProductByCode(code) {
-                        // Verifica si el código tiene 13 dígitos
-                        if (code.length === 13) {
-                            fetch('buscar_producto.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({codigo: code})
-                            })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            document.getElementById('nombre').value = data.nombre; // Asigna el nombre del producto
-                                        } else {
-                                            document.getElementById('nombre').value = 'No se encontró';
-                                        }
-                                    })
-                                    .catch(error => console.error('Error:', error));
-                        } else {
-                            document.getElementById('nombre').value = 'Código inválido';
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: document.querySelector('#scanner-container'),
+                        constraints: {
+                            facingMode: "environment" // Usa la cámara trasera
                         }
+                    },
+                    decoder: {
+                        readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
                     }
+                }, function (err) {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    Quagga.start();
+                });
+
+                Quagga.onDetected(function (result) {
+                    const code = result.codeResult.code;
+                    if (code) {
+                        // Aquí es donde se pasa el valor al input
+                        const inputField = document.getElementById('codigo'); // Selecciona el campo de entrada
+                        inputField.value = code; // Escribe el código en el campo
+                        closeScanner();
+                    }
+                });
+            }
+
+            function closeScanner() {
+                Quagga.stop();
+                document.getElementById('scanner-overlay').style.display = 'none';
+            }
+            function fetchProductByCode(code) {
+                // Verifica si el código tiene 13 dígitos
+                if (code.length === 13) {
+                    fetch('buscar_producto.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({codigo: code})
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById('nombre').value = data.nombre; // Asigna el nombre del producto
+                                } else {
+                                    document.getElementById('nombre').value = 'No se encontró';
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                } else {
+                    document.getElementById('nombre').value = 'Código inválido';
+                }
+            }
                 </script>
 
 
