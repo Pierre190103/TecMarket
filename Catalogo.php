@@ -4,41 +4,22 @@ $username_post = $_SESSION["usuario"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <?php include 'head.php'; ?>
-
     </head>
-
     <body>
         <?php include 'Cargando.php'; ?>
-
         <div class="container-fluid position-relative bg-white d-flex p-0">
-
-
-
-            <!-- Sidebar Start -->
             <div class="sidebar pe-4 pb-3">
                 <nav class="navbar bg-light navbar-light">
                     <?php include 'contenido1.php'; ?>
                     <div class="navbar-nav w-100">
-                               <?php include 'contenidoopciones.php'; ?>
-
-
+                        <?php include 'contenidoopciones.php'; ?>
                     </div>
-
-
                 </nav>
             </div>
-            <!-- Sidebar End -->
-
-
-            <!-- Content Start -->
             <div class="content">
-
-                <!-- Navbar Start -->
                 <?php include 'Navbar.php'; ?>
-                <!-- Navbar End -->
                 <div class="container-fluid pt-4 px-4">
                     <div class="bg-light text-center rounded p-4">
                         <div class="m-n2">
@@ -50,20 +31,16 @@ $username_post = $_SESSION["usuario"];
                             }
                             $nombreusuario = $username_post;
                             $sql = "SELECT DISTINCT c.codigo AS categoria_id, c.nombre AS nombre_categoria 
-                FROM productos p 
-                JOIN detalle_producto d ON p.detalle_producto_id = d.id 
-                JOIN categoria c ON d.Categoria = c.codigo 
-                WHERE p.detalle_bodega_id = (SELECT bodega_detalle_id FROM users WHERE username = '$nombreusuario')";
-
+                                    FROM productos p 
+                                    JOIN detalle_producto d ON p.detalle_producto_id = d.id 
+                                    JOIN categoria c ON d.Categoria = c.codigo 
+                                    WHERE p.detalle_bodega_id = (SELECT bodega_detalle_id FROM users WHERE username = '$nombreusuario')";
                             $result = $conn->query($sql);
-
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     $codigo_categoria = $row["categoria_id"];
                                     $nombre_categoria = $row["nombre_categoria"];
                                     $link = 'Catalogo.php?codigo=' . $codigo_categoria;
-
-                                    // If the category is 0, show all products
                                     if ($codigo_categoria == 0) {
                                         $link = 'inicio.php'; // Show all products
                                     }
@@ -77,14 +54,6 @@ $username_post = $_SESSION["usuario"];
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-                <!-- Widgets Start -->
                 <div class="container-fluid pt-4 px-4">
                     <div class="row g-4">
                         <div class="col-sm-12 col-xl-6">
@@ -98,10 +67,8 @@ $username_post = $_SESSION["usuario"];
                                 $idp = $_REQUEST ["codigo"];
                                 $sql = "SELECT p.id, d.codigo, d.Empaque, e.nombre AS nombre_empaque, d.Categoria, d.Unidades, u.nombre AS nombre_unidades, d.nombre, d.peso, p.detalle_bodega_id, p.stock, p.fechaVencimiento, p.precioCompra, p.precioVenta, p.ganancia FROM productos p JOIN detalle_producto d ON p.detalle_producto_id = d.id JOIN empaque e ON d.Empaque = e.codigo JOIN unidades u ON d.Unidades = u.codigo WHERE d.Categoria = $idp and p.detalle_bodega_id = ( SELECT bodega_detalle_id FROM users WHERE username = '$username_post' );";
                                 $result = $conn->query($sql);
-
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-
                                         echo '<div class="d-flex align-items-center border-bottom py-3">';
                                         echo '     <img class="rounded flex-shrink-0 me-3" src="img/9284424.png" alt="Producto" style="width: 80px; height: 80px;">';
                                         echo '     <div class="w-100">';
@@ -127,7 +94,6 @@ $username_post = $_SESSION["usuario"];
                                 ?>
                             </div>
                         </div>
-
                         <div class="col-sm-12 col-xl-6">
                             <div class="container ">
                                 <div class="d-flex align-items-center justify-content-between mb-4">
@@ -153,18 +119,14 @@ $username_post = $_SESSION["usuario"];
                                             if ($conn->connect_error) {
                                                 die("Conexión fallida: " . $conn->connect_error);
                                             }
-
-                                            $sql = "SELECT p.*, d.*, t.*, t.id as codigo_agregado FROM carrito t JOIN productos p ON t.id_producto = p.id JOIN detalle_producto d ON p.detalle_producto_id = d.id WHERE t.trabajador = '$username_post' AND t.cantidad > 0;
-";
+                                            $sql = "SELECT p.*, d.*, t.*, t.id as codigo_agregado FROM carrito t JOIN productos p ON t.id_producto = p.id JOIN detalle_producto d ON p.detalle_producto_id = d.id WHERE t.trabajador = '$username_post' AND t.cantidad > 0;";
                                             $result = $conn->query($sql);
-
                                             if ($result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {
                                                     echo '<tr>';
                                                     echo '<td>' . $row["Nombre"] . '</td>';
                                                     echo '<td>' . $row["cantidad"] . '</td>';
                                                     echo '<td>S/ ' . $row["precio"] . '</td>';
-
                                                     echo '<td>';
                                                     echo '<form method="post" action="eliminar_producto_tabla.php">';
                                                     echo '<input type="hidden" name="codigo_agregado" value="' . $row["codigo_agregado"] . '">';
@@ -173,7 +135,6 @@ $username_post = $_SESSION["usuario"];
                                                     echo '<button class="btn btn-sm btn-primary" >X</button>';
                                                     echo '</form>';
                                                     echo '</td>';
-
                                                     echo '</tr>';
                                                 }
                                             } else {
@@ -186,17 +147,14 @@ $username_post = $_SESSION["usuario"];
                                             }
                                             $conn->close();
                                             ?>
-
                                             <?php
                                             include 'config.php';
                                             $conn = new mysqli($servername, $username, $password, $database, $port);
                                             if ($conn->connect_error) {
                                                 die("Conexión fallida: " . $conn->connect_error);
                                             }
-
                                             $sql = "SELECT SUM(precio) AS suma_precios FROM carrito WHERE trabajador = '$username_post';";
                                             $result = $conn->query($sql);
-
                                             if ($result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {
 
@@ -213,10 +171,6 @@ $username_post = $_SESSION["usuario"];
                                             }
                                             $conn->close();
                                             ?>
-
-
-
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -225,16 +179,8 @@ $username_post = $_SESSION["usuario"];
                     </div>
                 </div>
             </div>
-
-
-
-
-
-            <!-- Back to Top -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
-
-        <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="lib/chart/chart.min.js"></script>
@@ -244,9 +190,6 @@ $username_post = $_SESSION["usuario"];
         <script src="lib/tempusdominus/js/moment.min.js"></script>
         <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-        <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>

@@ -4,11 +4,19 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/TecMarket/agregar_producto.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/agregar_carrito.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/Buscar.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/config.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/Cargando.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/contenidoopciones.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/eliminar_producto.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/Consulta.php</file>
             <file>file:/C:/xampp/htdocs/TecMarket/inicio.php</file>
             <file>file:/C:/xampp/htdocs/TecMarket/agregar_detalle_producto.php</file>
-            <file>file:/C:/xampp/htdocs/TecMarket/Buscar.php</file>
-            <file>file:/C:/xampp/htdocs/TecMarket/subir_detalle_producto.php</file>
-            <file>file:/C:/xampp/htdocs/TecMarket/config.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/cerrar.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/Navbar.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/contenido1.php</file>
+            <file>file:/C:/xampp/htdocs/TecMarket/Catalogo.php</file>
         </group>
     </open-files>
 </project-private>

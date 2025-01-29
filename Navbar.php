@@ -14,13 +14,13 @@
     </form>
 
     <script>
-    document.getElementById('busquedaInput').addEventListener('input', function() {
-        if (this.value.length === 13) {
-            // Envía el formulario automáticamente cuando se ingresan 13 dígitos
-            this.parentNode.submit();
-        }
-    });
-</script>
+        document.getElementById('busquedaInput').addEventListener('input', function () {
+            if (this.value.length === 13) {
+                // Envía el formulario automáticamente cuando se ingresan 13 dígitos
+                this.parentNode.submit();
+            }
+        });
+    </script>
 
 
 

@@ -1,11 +1,10 @@
 <?php
 session_start();
 $username_post = $_SESSION["usuario"];
-include 'config.php'; // Incluimos el archivo de configuración
+include 'config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <?php include 'head.php'; ?>
         <style>
@@ -47,13 +46,9 @@ include 'config.php'; // Incluimos el archivo de configuración
             }
         </style>
     </head>
-
     <body>
         <div class="container-fluid position-relative bg-white d-flex p-0">
-
             <?php include 'Cargando.php'; ?>
-
-            <!-- Sidebar Start -->
             <div class="sidebar pe-4 pb-3">
                 <nav class="navbar bg-light navbar-light">
                     <a href="inicio.php" class="navbar-brand mx-4 mb-3">
@@ -106,29 +101,10 @@ include 'config.php'; // Incluimos el archivo de configuración
                     </div>
                     <div class="navbar-nav w-100">
                         <?php include 'contenidoopciones.php'; ?>
-
-
                     </div>
             </div>
-            <!-- Sidebar End -->
-
-
-            <!-- Content Start -->
             <div class="content">
-
-                <!-- Navbar Start -->
                 <?php include 'Navbar.php'; ?>
-
-                <!-- Navbar End -->
-
-
-
-
-
-
-
-
-                <!-- Widgets Start -->
                 <div class="container-fluid pt-4 px-4">
                     <div class="row g-4">
                         <div class="col-12">
@@ -154,7 +130,6 @@ include 'config.php'; // Incluimos el archivo de configuración
                                             </button>
                                         </div>
                                     </div>
-
                                     <div class="overlay" id="scanner-overlay" style="display: none;">
                                         <div class="scanner-window">
                                             <button class="close-btn btn btn-danger" onclick="closeScanner()">X</button>
@@ -171,19 +146,15 @@ include 'config.php'; // Incluimos el archivo de configuración
                                         <label for="nombe" class="form-label">nombre</label>
                                         <input type="text" class="form-control" id="nombre" name="stock" placeholder="Ingrese la cantidad en stock" required>
                                     </div>
-
                                     <div class="mb-3 text-start">
                                         <label for="detalleEmpaqueId" class="form-label">Tipo de Empaque</label>
                                         <select class="form-control" id="detalleEmpaqueId" name="detalleEmpaqueId" required>
                                             <option value="" disabled selected>Seleccione Empaque</option>
                                             <?php
-                                            // Conexión a la base de datos
                                             $conn = new mysqli($servername, $username, $password, $database, $port);
                                             if ($conn->connect_error) {
                                                 die("Conexión fallida: " . $conn->connect_error);
                                             }
-
-                                            // Consulta de productos
                                             $sqlProductos = "SELECT codigo, nombre FROM empaque";
                                             $resultadoProductos = $conn->query($sqlProductos);
                                             if ($resultadoProductos->num_rows > 0) {
@@ -205,10 +176,8 @@ include 'config.php'; // Incluimos el archivo de configuración
                                         <select class="form-control" id="unidadId" name="unidadId" required>
                                             <option value="" disabled selected>Seleccione una unidad</option>
                                             <?php
-                                            // Consulta directa a la tabla unidades
                                             $sqlUnidades = "SELECT codigo, nombre FROM unidades";
                                             $resultadoUnidades = $conn->query($sqlUnidades);
-
                                             if ($resultadoUnidades->num_rows > 0) {
                                                 while ($fila = $resultadoUnidades->fetch_assoc()) {
                                                     echo "<option value='" . $fila['codigo'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
@@ -225,10 +194,9 @@ include 'config.php'; // Incluimos el archivo de configuración
                                             <option value="" disabled selected>Seleccione una categoria</option>
                                             <?php
                                             // Consulta directa a la tabla unidades
-                                            $sqlUnidades = "SELECT codigo, nombre FROM categoria";
-                                            $resultadoUnidades = $conn->query($sqlUnidades);
-
-                                            if ($resultadoUnidades->num_rows > 0) {
+                                            $sqlCategorias = "SELECT codigo, nombre FROM categoria";
+                                            $resultadoCategorias = $conn->query($sqlCategorias);
+                                            if ($resultadoCategorias->num_rows > 0) {
                                                 while ($fila = $resultadoUnidades->fetch_assoc()) {
                                                     echo "<option value='" . $fila['codigo'] . "'>" . htmlspecialchars($fila['nombre']) . "</option>";
                                                 }
@@ -238,15 +206,12 @@ include 'config.php'; // Incluimos el archivo de configuración
                                             ?>
                                         </select>
                                     </div>
-
                                     <button type="submit" class="btn btn-primary">Agregar Producto</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 <script src="https://unpkg.com/quagga/dist/quagga.min.js"></script>
                 <script>
                                                 let currentButton = null;
@@ -314,8 +279,6 @@ include 'config.php'; // Incluimos el archivo de configuración
                                                     }
                                                 }
                 </script>
-
-
                 <script>
                     // Calcular la ganancia automáticamente
                     document.getElementById("precioVenta").addEventListener("input", calcularGanancia);
@@ -328,21 +291,9 @@ include 'config.php'; // Incluimos el archivo de configuración
                         document.getElementById("ganancia").value = ganancia.toFixed(2);
                     }
                 </script>
-
-
-
-
             </div>
-
-
-
-
-
-            <!-- Back to Top -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
-
-        <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="lib/chart/chart.min.js"></script>
@@ -352,9 +303,6 @@ include 'config.php'; // Incluimos el archivo de configuración
         <script src="lib/tempusdominus/js/moment.min.js"></script>
         <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-        <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>
